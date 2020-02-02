@@ -29,7 +29,7 @@ from mrcnn.config import Config
 from mrcnn import model as modellib, utils
 
 # Path to trained weights file
-FASHION_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
+FASHION_MODEL_PATH = os.path.join(ROOT_DIR, "model")
 
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
@@ -307,7 +307,7 @@ if __name__ == '__main__':
                         help="'train' or 'evaluate' on MS COCO")
     
     parser.add_argument('--json_file_dir',
-                        metavar="/path/to/train_json/",default="C:/tensor_code/fashion/dataset/deepfashion2/train/deepfashion2.json", 
+                        metavar="/path/to/train_json/",default="C:/tensor_code/fashion/dataset/deepfashion2/train/coco_train_0.json", 
                         help='Directory of the MS-COCO dataset')
     
     parser.add_argument('--image_dir',
@@ -316,19 +316,20 @@ if __name__ == '__main__':
 
 
     parser.add_argument('--val_json_file_dir', \
-                        metavar="/path/to/val_json/",default='C:\\tensor_code\\fashion\\dataset\\deepfashion2\\train\\deepfashion2_train_2.json', 
+                        metavar="/path/to/val_json/",default='C:\\tensor_code\\fashion\\dataset\\deepfashion2\\train\\coco_train_1.json', 
                         help='Directory of the MS-COCO dataset')
     
     parser.add_argument('--val_image_dir', 
                         metavar="/path/to/train_image/",default="C:/tensor_code/fashion/dataset/deepfashion2/train/1", 
                         help='Directory of the MS-COCO dataset')
     parser.add_argument('--load_weight', 
-                        default=False, 
+                        default=True, 
                         help="Path to weights .h5 file or 'coco'")
 
-    parser.add_argument('--model',default=FASHION_MODEL_PATH,
+    parser.add_argument('--model',default='last',
                         metavar="/path/to/weights.h5",
                         help="Path to weights .h5 file or 'coco'")
+
     parser.add_argument('--logs', required=False,   
                         default=DEFAULT_LOGS_DIR,
                         metavar="/path/to/logs/",
@@ -377,6 +378,7 @@ if __name__ == '__main__':
         elif args.model.lower() == "imagenet":
             # Start from ImageNet trained weights
             model_path = model.get_imagenet_weights()
+            print('imagenet model path:',model_path)
         else:
             model_path = args.model
 
@@ -409,7 +411,7 @@ if __name__ == '__main__':
         model.train(dataset_train, dataset_val,
                     learning_rate=config.LEARNING_RATE,
                     epochs=40,
-                    layers='all',
+                    layers='heads',
                     augmentation=augmentation)
 
         # Training - Stage 2
