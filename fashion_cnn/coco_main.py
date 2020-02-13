@@ -62,6 +62,8 @@ class FashionConfig(Config):
     # Number of classes (including background)
     NUM_CLASSES = 1 + 13  # deepfashion2 has 13 classes
 
+    BACKBONE = "mobilenetv1"
+
 
 ############################################################
 #  Dataset
